@@ -57,8 +57,22 @@ router.get("/country/:country", (req, res) => {
 	  });
 	}
 	res.json(filterCountry);
-  });
+});
   
+router.get("/priceCategory/:priceCategory", (req, res) => {
+	const priceCategory = req.params.priceCategory;
+
+	const filterPrice = data.filter(
+	  (i) => i.priceCategory.toString() === priceCategory.toString()
+	);
+	if (filterPrice.length < 1) {
+	  return res.json({
+		error: `Error. ${priceCategory} is unavailable`,
+	  });
+	}
+	res.json(filterPrice);
+});
+
 function validHotel(req, res, next) {
 	const validation = hotel.validate(req.body);
 	if (validation.error) {
