@@ -43,6 +43,21 @@ router.get("/:id", (req, res) => {
 	  }
 	  res.json(restaurantsId);
 });
+
+router.get("/country/:country", (req, res) => {
+	const country = req.params.country;
+  
+	const filterCountry = data.filter(
+		(i) => i.country.toString() === country.toString()
+	);
+	if (filterCountry.length < 1) {
+	  return res.json({
+		error: `${country} not found `,
+	  });
+	}
+	res.json(filterCountry);
+});
+
   
 function validRestaurants(req, res, next) {
 	const validation = restaurants.validate(req.body);

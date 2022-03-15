@@ -44,6 +44,20 @@ router.get("/:id", (req, res) => {
 	  }
 	  res.json(hotelId);
 });
+
+router.get("/country/:country", (req, res) => {
+	const country = req.params.country;
+  
+	const filterCountry = data.filter(
+		(i) => i.country.toString() === country.toString()
+	);
+	if (filterCountry.length < 1) {
+	  return res.json({
+		error: `${country} not found `,
+	  });
+	}
+	res.json(filterCountry);
+  });
   
 function validHotel(req, res, next) {
 	const validation = hotel.validate(req.body);
