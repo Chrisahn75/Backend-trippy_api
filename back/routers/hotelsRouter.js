@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../json/hotels.json");
-const Joi = require("joi");
+const Joi = require("Joi");
 
 const hotel = Joi.object({
   name: Joi.string().required(),
@@ -14,6 +14,20 @@ const hotel = Joi.object({
   priceCategory: Joi.number().min(1).max(3).required(),
 });
 
+function handleHotel(req, res, next) {
+	hotelId = data.find((hotel, test) => {
+	  hotelNew = test;
+	  return hotel.id.toString() === req.params.id.toString();
+	});
+  
+	if (!hotelId) {
+	  return res.status(400).json({
+		error: "Error 400",
+		description: `${req.params.id} id does not exists`,
+	  });
+	}
+	next();
+}
 
 router.get("/", (_req, res) => {
     res.json(data);
@@ -59,6 +73,19 @@ router.post("/", validHotel, (req, res) => {
 		message: "Hotel added", 
 		description: addHotel 
 	});
-  });
+});
+
+router.patch("/:id",handleHotel, (req, res) => {
+	hotelId.name = req.body.name;
+	res.json({ 
+		message: "Update hotel name ", 
+		description: hotelId 
+	});
+});
+
+router.delete("/:id", handleHotel, (req, res) => {
+	data.splice(hotelNew, 1);
+	res.json(data);
+});
 
 module.exports = router;
